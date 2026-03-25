@@ -5,7 +5,7 @@ export const config = {
   baseUrl: process.env.BASE_URL ?? "http://localhost:3000",
   supabase: {
     url: process.env.SUPABASE_URL,
-    serviceRoleKey: process.env.SUPABASE_KEY,
+    key: process.env.SUPABASE_KEY,
   }
 };
 
