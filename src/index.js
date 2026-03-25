@@ -7,6 +7,9 @@ import { router as urlsRouter } from "./routes/urls.js";
 const app = express();
 app.use(express.json());
 
+// ── Health check ──────────────────────────────────────────────────────────────
+app.get("/", (_req, res) => res.json({ status: "ok", timestamp: new Date().toISOString() }));
+
 // ── API routes ────────────────────────────────────────────────────────────────
 app.use("/api/urls", urlsRouter);
 
