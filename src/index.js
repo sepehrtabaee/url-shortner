@@ -1,11 +1,26 @@
 import express from "express";
 import { config } from "./config.js";
 import { supabase } from "./db/supabase.js";
-import { getCachedUrl, cacheUrl } from "./db/redis.js";
+import { getCachedUrl, cacheUrl, redis } from "./db/redis.js";
 import { router as urlsRouter } from "./routes/urls.js";
+import rateLimit from "express-rate-limit";
+import { RedisStore } from "rate-limit-redis";
 
 const app = express();
 app.use(express.json());
+
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,                  // requests per window per IP
+  standardHeaders: true,
+  legacyHeaders: false,
+  store: new RedisStore({
+    sendCommand: (...args) => redis.sendCommand(args),
+  }),
+});
+
+app.use(limiter);
 
 // ── Health check ──────────────────────────────────────────────────────────────
 app.get("/", (_req, res) => res.json({ status: "ok", timestamp: new Date().toISOString() }));
