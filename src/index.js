@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { config } from "./config.js";
 import { supabase } from "./db/supabase.js";
 import { getCachedUrl, cacheUrl, redis } from "./db/redis.js";
@@ -7,6 +8,7 @@ import rateLimit from "express-rate-limit";
 import { RedisStore } from "rate-limit-redis";
 
 const app = express();
+app.use(cors({ origin: "https://sepehrtabaee.com" }));
 app.use(express.json());
 
 
