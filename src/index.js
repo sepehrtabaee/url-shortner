@@ -46,7 +46,7 @@ app.get("/:code", async (req, res) => {
       .single();
 
     if (error || !data) {
-      return res.status(404).json({ error: "Short URL not found" });
+      return res.redirect(`${config.websiteUrl}/tinyurl?r=n&c=${encodeURIComponent(code)}`);
     }
 
     record = data;
@@ -59,11 +59,11 @@ app.get("/:code", async (req, res) => {
 
   // 3. Guard: inactive or expired
   if (!record.is_active) {
-    return res.status(410).json({ error: "This short URL has been deactivated" });
+    return res.redirect(`${config.websiteUrl}/tinyurl?r=n&c=${encodeURIComponent(code)}`);
   }
 
-  if (new Date(record.expiration_date) < new Date()) {
-    return res.status(410).json({ error: "This short URL has expired" });
+  if (record.expiration_date && new Date(record.expiration_date) < new Date()) {
+    return res.redirect(`${config.websiteUrl}/tinyurl?r=e&c=${encodeURIComponent(code)}`);
   }
 
   // 4. Log the click asynchronously — don't block the redirect
