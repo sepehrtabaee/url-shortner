@@ -8,7 +8,7 @@ import rateLimit from "express-rate-limit";
 import { RedisStore } from "rate-limit-redis";
 
 const app = express();
-app.use(cors({ origin: "https://sepehrtabaee.com" }));
+app.use(cors({ origin: config.websiteUrl }));
 app.use(express.json());
 
 
